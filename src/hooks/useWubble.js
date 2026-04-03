@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { generateTrack, waitForCompletion } from '../services/wubbleApi';
 
 /**
- * CUSTOM HOOK: useWubble
- * Orchestrates the full music generation lifecycle.
+ * CUSTOM HOOK: useWubble (Stage 12 - Final Stabilization)
+ * Orchestrates the full music generation lifecycle with instant error feedback.
  */
 export const useWubble = () => {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -11,7 +11,8 @@ export const useWubble = () => {
   const [error, setError] = useState(null);
 
   /**
-   * Triggers the generation flow: Generate -> Wait -> Result.
+   * Triggers the generation flow.
+   * Returns: { success: true, data: track } OR { success: false, error: msg }
    */
   const generate = async (prompt) => {
     if (!prompt.trim()) return null;
@@ -21,7 +22,7 @@ export const useWubble = () => {
     setError(null);
 
     try {
-      // 700ms "Psychology" Delay
+      // 700ms Psychology Thinking Delay
       await new Promise(r => setTimeout(r, 700));
 
       const { request_id } = await generateTrack(prompt);
@@ -34,13 +35,14 @@ export const useWubble = () => {
 
       setIsGenerating(false);
       setStatusMessage('');
-      return { ...result, id: request_id };
+      return { success: true, data: { ...result, id: request_id } };
       
     } catch (err) {
+      const msg = err.message || "Failed to generate track.";
       setIsGenerating(false);
       setStatusMessage('');
-      setError(err.message);
-      return null;
+      setError(msg);
+      return { success: false, error: msg };
     }
   };
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
-// STAGE 10: Elite System Architecture
+// STAGE 12: Elite System Architecture (Final Stabilization)
 import { applyRemix } from './utils/remixEngine';
 import { getContextualSuggestion } from './utils/suggestionEngine';
 import { 
@@ -13,11 +13,11 @@ import {
   resolvePrompt
 } from './utils/sessionOrchestrator';
 
-// STAGE 10: High-Tier Controller Hooks
+// STAGE 12: High-Tier Controller Hooks
 import { useAudioController } from './hooks/useAudioController';
 import { useWubble } from './hooks/useWubble';
 
-// STAGE 10: Standardized UI Component Library (Pure UI)
+// STAGE 12: Pure UI Component Library (Final Branding)
 import PromptInput from './components/PromptInput';
 import RemixConsole from './components/RemixConsole';
 import AudioPlayerSection from './components/AudioPlayerSection';
@@ -26,8 +26,8 @@ import HistorySidebar from './components/HistorySidebar';
 import './App.css';
 
 /**
- * ELITE ORCHESTRATOR: Wubble Studio (Stage 10)
- * Top-tier architectural implementation with zero-compromise logic separation.
+ * ELITE ORCHESTRATOR: Wubble Studio (Stage 12 - FINAL)
+ * Final architectural stabilization and industrial-tier orchestration.
  */
 function App() {
   // 1. Centralized Engineered Session State
@@ -40,11 +40,11 @@ function App() {
     error: null
   });
 
-  // 2. Specialized System Controllers
-  const { isGenerating, statusMessage, error, generate } = useWubble();
+  // 2. Specialized System Controllers (Stage 12 stabilized)
+  const { isGenerating, statusMessage, generate } = useWubble();
   const { isPlaying, compareMode, setTrack, play, pause, stopAll, toggleCompare, audioRef } = useAudioController();
 
-  // 3. Flow Engine: Automatic Intelligence Orchestration
+  // 3. Flow Engine: Automatic Contextual Suggestion Execution
   useEffect(() => {
     if (session.currentTrack && !isGenerating) {
       const suggestion = getContextualSuggestion(session.currentTrack.prompt);
@@ -53,32 +53,32 @@ function App() {
   }, [session.currentTrack, isGenerating]);
 
   /**
-   * HANDLER: Music Generation (Elite Lifecycle)
+   * ACTION: Music Generation Flow (Engineered Lifecycle)
    */
   const handleGenerate = async (overriddenPrompt = null) => {
     const activePrompt = resolvePrompt(session.prompt, overriddenPrompt);
     if (!canGenerate(activePrompt, isGenerating)) return;
 
-    // UX Safeguard: Reset and Silent Audio Cleanup
+    // UX Safeguard: Silent Audio Reset
     stopAll();
 
-    const result = await generate(activePrompt);
+    const response = await generate(activePrompt);
     
-    if (result) {
-      const newTrack = { ...result, prompt: activePrompt };
+    if (response?.success) {
+      const newTrack = { ...response.data, prompt: activePrompt };
 
-      // HIGH-TIER: Eager Preloading for sub-millisecond A/B switch
+      // HIGH-TIER: Eager Preloading for instant switch demo
       setTrack(newTrack.audio_url, session.currentTrack?.audio_url);
 
       // System Orchestration: Pure logic decoupled from UI
       setSession(prev => orchestrateNewTrack(prev, newTrack));
-    } else if (error) {
-       setSession(prev => orchestrateError(prev, error));
+    } else if (response?.error) {
+       setSession(prev => orchestrateError(prev, response.error));
     }
   };
 
   /**
-   * HANDLER: Sound Remix / Evolution
+   * ACTION: Evolution Remix Transformation
    */
   const handleRemix = (type) => {
     const newPrompt = applyRemix(session.currentTrack.prompt, type);
@@ -89,11 +89,11 @@ function App() {
   return (
     <div className="wubble-container">
       <header className="wubble-header">
-        <motion.div className="logo-section" initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
+        <motion.div className="logo-section" initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
           <Sparkles className="logo-icon" />
           <h1>Wubble Studio</h1>
         </motion.div>
-        <p className="hook-subtitle">Intelligent AI Music System | Elite Architectural Build</p>
+        <p className="hook-subtitle">Intelligent AI Music System | Stage 12 Final Mastery Build</p>
       </header>
 
       <div className="wubble-layout">
@@ -107,7 +107,7 @@ function App() {
           />
 
           <div className="wubble-card glass main-glow">
-            {/* Evolution Explorer Engine */}
+            {/* Visual Evolution Trail Mapping */}
             {session.evolution.length > 0 && !isGenerating && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="evolution-line">
                 {session.evolution.map((step, i) => (
@@ -136,11 +136,11 @@ function App() {
               </AnimatePresence>
             </div>
 
-            {(session.error || error) && (
-              <p className="error-text">{"⚠️ Error: " + (session.error || error)}</p>
+            {session.error && (
+              <p className="error-text">{"⚠️ Error: " + session.error}</p>
             )}
 
-            {/* Industrial Decoupled Logic Engines */}
+            {/* Strategic Branding Logic Engines */}
             {session.currentTrack && !isGenerating && (
               <RemixConsole 
                 onRemix={handleRemix}
@@ -173,7 +173,7 @@ function App() {
       </div>
 
       <footer className="wubble-footer">
-        <p>Architected for the Wubble Hackathon | Elite Purity by Thanvi Reddy</p>
+        <p>Architected for the Wubble Hackathon | End-to-End Master Stabilization by Thanvi Reddy</p>
       </footer>
     </div>
   );
