@@ -1,16 +1,39 @@
-# React + Vite
+# 🎧 Wubble Studio — Intelligent AI Music Experience
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Wubble Studio is a forward-thinking AI music generation platform that focuses on **guided exploration** and **intelligent evolution**. Instead of just generating static outputs, it acts as a co-creator, suggesting moods, adding depth, and allowing for instant version comparison.
 
-Currently, two official plugins are available:
+## 🚀 Key Differentiators (Top-Tier Hackathon Strategy)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **🧠 Guided Intelligence:** The system explains *why* it suggests a remix ("Adding bass will give it more depth").
+- **⚡ Compare Mode:** An instant A/B toggle to showcase the difference between AI iterations.
+- **🛣️ Evolution Path:** A visual breadcrumb UI that shows the prompt journey (`v1 → v2 → v3`).
+- **🔗 Contextual Feedback:** Predictive "Suggested Next" actions based on current prompt content.
 
-## React Compiler
+## 📺 Demo Presentation Script (How to Win)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Use this script to guide your presentation:
 
-## Expanding the ESLint configuration
+1. **The Hook:** *"Most AI music tools are static. I built Wubble Studio to bridge the gap between complex AI and intuitive music creation via presets and guided evolution."*
+2. **The Preset:** Click **"🎧 Study,"** then hit **Generate.** Let the track play for 3 seconds.
+3. **The Intelligence:** Show the "AI Suggested Next" button. Say: *"The system intelligently suggested adding energy for focus. Let's try that."* Click the energy remix button.
+4. **The Aha! Moment:** Once the new version is ready, click **"COMPARE v1 vs v2."** Switch between them. Say: *"Notice the instant growth from the original lofi to a more focused beat. This is evolving music, not just generating it."*
+5. **The Close:** Show the history and evolution path. *"Every track is a journey. Thank you."*
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- **Frontend:** React + Vite
+- **Styling:** Premium Vanilla CSS (Dark #0f0f0f + Glassmorphism)
+- **Animations:** Framer Motion
+- **Icons:** Lucide-React
+- **API:** Wubble AI (Chat/Multimodal Music Generation)
+
+## 🛠️ Setup & Running
+
+1. **Clone the project**
+2. **Install dependencies:** `npm install`
+3. **Add your API Key:** Update `src/config.js` with your `WUBBLE_API_KEY`.
+4. **Run Dev Mode:** `npm run dev`
+
+---
+
+Built for the **Wubble Hackathon** by **Thanvi Reddy**.
