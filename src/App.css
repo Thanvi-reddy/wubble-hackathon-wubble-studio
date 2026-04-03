@@ -1,119 +1,257 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: dark;
-  color: #ffffff;
-  background-color: #0f0f0f;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary-blue: #00BFFF;
+  --dark-bg: #0f0f0f;
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 body {
+  background-color: var(--dark-bg);
+  color: white;
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: center;
+  overflow-x: hidden;
 }
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* Wubble Custom Styles */
-.wubble-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
   width: 100%;
-  max-width: 800px;
-  margin: auto;
+  max-width: 1200px;
 }
 
-.wubble-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 3rem;
+.wubble-container {
+  padding: 2rem;
+  width: 100%;
+}
+
+.wubble-header {
+  margin-bottom: 3rem;
   position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
 }
 
+.wubble-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.wubble-header p {
+  color: #888;
+  margin: 0.5rem 0;
+}
+
+/* Layout */
+.wubble-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.wubble-main {
+  flex: 1;
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2rem;
+}
+
+/* Presets */
+.presets-bar {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.preset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
+/* Main Input Section */
 .wubble-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 1.5rem;
-  color: white;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  resize: none;
-  transition: border-color 0.3s;
-}
-
-.wubble-input:focus {
-  outline: none;
-  border-color: #00BFFF;
-}
-
-.wubble-button {
-  background: linear-gradient(135deg, #00BFFF 0%, #0077FF 100%);
-  color: white;
+  background: rgba(255, 255, 255, 0.03);
   border: none;
-  border-radius: 12px;
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.4rem;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  outline: none;
+  resize: none;
+}
+
+.evolution-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  color: #666;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.path-step {
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+}
+
+.generate-btn {
+  background: white;
+  color: black;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s;
 }
 
-.wubble-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 191, 255, 0.2);
+.generate-btn:hover {
+  background: var(--primary-blue);
+  color: white;
 }
 
-.wubble-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Remix Section */
+.remix-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.wubble-audio-player {
-  margin-top: 2rem;
-  width: 100%;
+.remix-grid {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.status-indicator {
-  display: inline-block;
-  margin-left: 10px;
+.remix-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #999;
+  padding: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all 0.3s;
+}
+
+.remix-btn.highlight {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  box-shadow: 0 0 15px rgba(0, 191, 255, 0.1);
+}
+
+.suggestion-text {
+  margin-top: 1rem;
+  color: #666;
+  font-style: italic;
   font-size: 0.9rem;
-  color: #888;
+}
+
+/* Sidebar History */
+.wubble-sidebar {
+  width: 300px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.history-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.h-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.h-prompt {
+  margin: 0.2rem 0 0 0;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* Compare Mode */
+.compare-toggle {
+  background: transparent;
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.compare-toggle.active {
+  background: var(--primary-blue);
+  color: black;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  background: var(--primary-blue);
+  color: black;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.status-msg {
+  margin-left: 1rem;
+  color: #555;
+  font-size: 0.9rem;
 }
 
 .pulse {
-  animation: pulse-animation 2s infinite;
+  animation: pulse-op 1.5s infinite;
 }
 
-@keyframes pulse-animation {
-  0% { opacity: 0.4; }
+@keyframes pulse-op {
+  0% { opacity: 0.3; }
   50% { opacity: 1; }
-  100% { opacity: 0.4; }
+  100% { opacity: 0.3; }
 }
