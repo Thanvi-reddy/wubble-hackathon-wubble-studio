@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
-// Stage 7: Engineered Architecture
-import { applyRemix } from './utils/promptEngine';
+// STAGE 8: System-Driven Architecture
+import { generateTrack, waitForCompletion } from './services/wubbleApi';
+import { applyRemix } from './utils/remixEngine';
 import { getContextualSuggestion } from './utils/suggestionEngine';
-import { useAudio } from './hooks/useAudio';
+import { orchestrateNewTrack, updatePrompt, orchestrateError } from './utils/sessionOrchestrator';
+
+// STAGE 8: High-Tier Controller Hooks
+import { useAudioController } from './hooks/useAudioController';
 import { useWubble } from './hooks/useWubble';
 
-// Stage 7: Pure UI Component Library
+// STAGE 8: Standardized UI Component Library
 import PromptInput from './components/PromptInput';
 import RemixConsole from './components/RemixConsole';
 import AudioPlayerSection from './components/AudioPlayerSection';
@@ -17,24 +21,25 @@ import HistorySidebar from './components/HistorySidebar';
 import './App.css';
 
 /**
- * FINAL ORCHESTRATOR: Wubble Studio
- * Zero-compromise high-end engineering build.
+ * SYSTEM ORCHESTRATOR: Wubble Studio
+ * High-end architectural implementation with zero-compromise logic separation.
  */
 function App() {
-  // 1. Central Session State (Engineered)
+  // 1. Centralized Engineered Session State
   const [session, setSession] = useState({
     prompt: '',
     currentTrack: null,
     history: [],
     evolution: [],
-    suggestion: null
+    suggestion: null,
+    error: null
   });
 
-  // 2. High-Tier Service Hooks
+  // 2. Industrial-Grade Logic Controllers
   const { isGenerating, statusMessage, error, generate } = useWubble();
-  const { isPlaying, compareMode, setTrack, play, pause, stopAll, toggleCompare, audioRef } = useAudio();
+  const { isPlaying, compareMode, setTrack, play, pause, stopAll, toggleCompare, audioRef } = useAudioController();
 
-  // 3. Engine Orchestration: Re-compute Intelligent Suggestions
+  // 3. Intelligence Flow: Automatic Suggestion Orchestration
   useEffect(() => {
     if (session.currentTrack && !isGenerating) {
       const suggestion = getContextualSuggestion(session.currentTrack.prompt);
@@ -43,13 +48,13 @@ function App() {
   }, [session.currentTrack, isGenerating]);
 
   /**
-   * ACTION: Generate (Mastery Implementation)
+   * HANDLER: Music Generation (Lifecycle Engineered)
    */
   const handleGenerate = async (overriddenPrompt = null) => {
     const activePrompt = overriddenPrompt || session.prompt;
     if (!activePrompt.trim() || isGenerating) return;
 
-    // UX SAFEGUARD: Cleanup Audio before fresh generation
+    // UX SAFEGUARD: Reset and Silent Audio Cleanup
     stopAll();
 
     const result = await generate(activePrompt);
@@ -57,36 +62,33 @@ function App() {
     if (result) {
       const newTrack = { ...result, prompt: activePrompt };
 
-      // HIGH-TIER: Eagerly preload current and previous for instant compare
+      // HIGH-TIER: Eager Preloading for instant switch demo
       setTrack(newTrack.audio_url, session.currentTrack?.audio_url);
 
-      // SESSION LOGIC
-      setSession(prev => ({
-        ...prev,
-        history: prev.currentTrack ? [prev.currentTrack, ...prev.history] : prev.history,
-        currentTrack: newTrack,
-        evolution: [...prev.evolution, activePrompt.split(' ').slice(0, 2).join(' ')],
-      }));
+      // System Orchestration: Update Logic decoupled from UI
+      setSession(prev => orchestrateNewTrack(prev, newTrack));
+    } else if (error) {
+       setSession(prev => orchestrateError(prev, error));
     }
   };
 
   /**
-   * ACTION: Remix Transformation
+   * HANDLER: Sound Remix / Evolution
    */
   const handleRemix = (type) => {
     const newPrompt = applyRemix(session.currentTrack.prompt, type);
-    setSession(prev => ({ ...prev, prompt: newPrompt }));
+    setSession(prev => updatePrompt(prev, newPrompt));
     handleGenerate(newPrompt);
   };
 
   return (
     <div className="wubble-container">
       <header className="wubble-header">
-        <div className="logo-section">
+        <div className="logo-section"  initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
           <Sparkles className="logo-icon" />
           <h1>Wubble Studio</h1>
         </div>
-        <p>Interactive AI Music Experience | Zero-Compromise Build</p>
+        <p>Interactive AI Music Experience | Industrial System Build</p>
       </header>
 
       <div className="wubble-layout">
@@ -94,21 +96,21 @@ function App() {
           
           <PromptInput 
             value={session.prompt}
-            onChange={(val) => setSession(prev => ({ ...prev, prompt: val }))}
+            onChange={(val) => setSession(prev => updatePrompt(prev, val))}
             onSelectPreset={handleGenerate}
             disabled={isGenerating}
           />
 
           <div className="wubble-card glass main-glow">
-            {/* Visual Evolution Trail */}
+            {/* Evolution Trail: Dynamic Creation Path */}
             {session.evolution.length > 0 && !isGenerating && (
-              <div className="evolution-line">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="evolution-line">
                 {session.evolution.map((step, i) => (
                   <span key={i} className="path-step">
                     {step} {i < session.evolution.length - 1 && <ArrowRight size={14} />}
                   </span>
                 ))}
-              </div>
+              </motion.div>
             )}
 
             <div className="action-row">
@@ -129,9 +131,11 @@ function App() {
               </AnimatePresence>
             </div>
 
-            {error && <p className="error-text">{"⚠️ " + error}</p>}
+            {(session.error || error) && (
+              <p className="error-text">{"⚠️ Error: " + (session.error || error)}</p>
+            )}
 
-            {/* Remix and Guided Suggestion Engine */}
+            {/* Decoupled Remix Engine & Suggestion Panel */}
             {session.currentTrack && !isGenerating && (
               <RemixConsole 
                 onRemix={handleRemix}
@@ -164,7 +168,7 @@ function App() {
       </div>
 
       <footer className="wubble-footer">
-        <p>Pure Engineered Build for Wubble Hackathon | Thanvi Reddy</p>
+        <p>Architected for the Wubble Hackathon | Industrial Mastery by Thanvi Reddy</p>
       </footer>
     </div>
   );
