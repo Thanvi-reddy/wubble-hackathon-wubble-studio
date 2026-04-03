@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 
 /**
- * HOOK: useAudioController (Stage 8 - Industrial Tier)
- * Specialized lifecycle and preloading for instant A/B Contrast Mode.
+ * HOOK: useAudioController (Stage 15 - Elite A/B Compare Engine)
+ * High-precision lifecycle and preloading for instant, zero-latency A/B switching.
  */
 export const useAudioController = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   
-  // Audio Nodes
+  // High-Tier: Dedicated Dual Nodes for Parallel Preloading
   const currentAudio = useRef(new Audio());
   const previousAudio = useRef(new Audio());
 
@@ -20,10 +20,13 @@ export const useAudioController = () => {
   }, []);
 
   /**
-   * Eager Preloading for sub-millisecond track switching.
+   * EAGER PRELOADING (Rule #6 & #7)
+   * Pre-loads the 'Last Version' into memory to eliminate switching delay.
    */
   const setTrack = (url, lastUrl = null) => {
+    // Stage 9: Absolute Silence Reset
     stopAll();
+
     currentAudio.current.src = url;
     currentAudio.current.load();
 
@@ -34,8 +37,8 @@ export const useAudioController = () => {
   };
 
   const play = () => {
-    const active = compareMode ? previousAudio.current : currentAudio.current;
-    active.play();
+    const activeNode = compareMode ? previousAudio.current : currentAudio.current;
+    activeNode.play();
     setIsPlaying(true);
   };
 
@@ -53,18 +56,28 @@ export const useAudioController = () => {
     setIsPlaying(false);
   };
 
+  /**
+   * ELITE SWITCHING LOGIC
+   * Switches BETWEEN nodes while maintaining playback context (A/B Contrast).
+   */
   const toggleCompare = () => {
+    const active = currentAudio.current;
+    const standby = previousAudio.current;
+
+    // RULE #3 Behavior: INSTANT Switch
     if (compareMode) {
-      const time = previousAudio.current.currentTime;
-      previousAudio.current.pause();
-      currentAudio.current.currentTime = time;
-      if (isPlaying) currentAudio.current.play();
+      // Switch back to CURRENT [v2]
+      const time = standby.currentTime;
+      standby.pause();
+      active.currentTime = time;
+      if (isPlaying) active.play();
       setCompareMode(false);
     } else {
-      const time = currentAudio.current.currentTime;
-      currentAudio.current.pause();
-      previousAudio.current.currentTime = time;
-      if (isPlaying) previousAudio.current.play();
+      // Switch to PREVIOUS [v1]
+      const time = active.currentTime;
+      active.pause();
+      standby.currentTime = time;
+      if (isPlaying) standby.play();
       setCompareMode(true);
     }
   };
