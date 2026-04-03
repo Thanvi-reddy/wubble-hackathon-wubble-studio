@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { generateTrack, waitForCompletion } from './services/wubbleApi'
-import { Music, Zap, Volume2, Film, History as HistoryIcon, ArrowRight, Play, Pause, Repeat } from 'lucide-react'
+import { Music, Zap, Volume2, Film, History as HistoryIcon, ArrowRight, Play, Pause, Repeat, Sparkles } from 'lucide-react'
 import './App.css'
 
 const PRESETS = [
@@ -35,16 +36,16 @@ function App() {
   const [prompt, setPrompt] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
   const [statusMessage, setStatusMessage] = useState('')
-  const [currentTrack, setCurrentTrack] = useState(null) // { url, title, prompt, id }
+  const [currentTrack, setCurrentTrack] = useState(null)
   const [history, setHistory] = useState([])
   const [compareMode, setCompareMode] = useState(false)
   const [evolutionPath, setEvolutionPath] = useState([])
   const [suggestion, setSuggestion] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
   
   const audioRef = useRef(null)
-  const prevAudioRef = useRef(null)
 
-  // Suggestion logic based on current prompt
+  // Suggestion logic
   useEffect(() => {
     if (currentTrack && !isGenerating) {
       const p = currentTrack.prompt.toLowerCase()
@@ -91,6 +92,7 @@ function App() {
       setEvolutionPath([...evolutionPath, activePrompt.split(' ').slice(0, 2).join(' ')])
       setStatusMessage('')
       setCompareMode(false)
+      setIsPlaying(true)
       
     } catch (error) {
       console.error(error)
@@ -109,14 +111,10 @@ function App() {
 
   const toggleCompare = () => {
     if (!history.length) return
-    const prev = history[0]
-    
     if (!compareMode) {
-      // Switching to previous
       audioRef.current.pause()
       setCompareMode(true)
     } else {
-      // Switching back to current
       setCompareMode(false)
     }
   }
@@ -124,9 +122,11 @@ function App() {
   return (
     <div className="wubble-container">
       <header className="wubble-header">
-        <div className="logo-glow"></div>
-        <h1>Wubble Studio</h1>
-        <p>Guided AI Music Creator</p>
+        <div className="logo-section">
+          <Sparkles className="logo-icon" />
+          <h1>Wubble Studio</h1>
+        </div>
+        <p>Intelligent AI Music Experience</p>
       </header>
 
       <div className="wubble-layout">
@@ -140,7 +140,7 @@ function App() {
             ))}
           </div>
 
-          <div className="wubble-card glass">
+          <div className="wubble-card glass main-glow">
             <textarea
               className="wubble-input"
               placeholder="What should we create today?"
@@ -150,13 +150,17 @@ function App() {
             />
 
             {!isGenerating && currentTrack && (
-              <div className="evolution-line">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="evolution-line"
+              >
                 {evolutionPath.map((step, i) => (
                   <span key={i} className="path-step">
                     {step} {i < evolutionPath.length - 1 && <ArrowRight size={14} />}
                   </span>
                 ))}
-              </div>
+              </motion.div>
             )}
 
             <div className="action-row">
@@ -168,12 +172,27 @@ function App() {
                 {isGenerating ? 'AI THINKING...' : 'GENERATE'}
               </button>
               
-              {isGenerating && <span className="status-msg">{statusMessage}</span>}
+              <AnimatePresence>
+                {isGenerating && (
+                  <motion.span 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="status-msg"
+                  >
+                    {statusMessage}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Remix Options */}
+            {/* Remix Section */}
             {currentTrack && !isGenerating && (
-              <div className="remix-section">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="remix-section"
+              >
                 <h4>Suggested Next:</h4>
                 <div className="remix-grid">
                   {Object.entries(REMIX_OPTIONS).map(([type, opt]) => (
@@ -191,34 +210,53 @@ function App() {
                     {suggestion.suggestion}
                   </p>
                 )}
-              </div>
+              </motion.div>
             )}
           </div>
 
-          {/* Audio Player & Compare */}
-          {currentTrack && (
-            <div className="player-card glass">
-              <div className="player-header">
-                <div>
-                  <span className="badge">{compareMode ? 'PREVIOUS VERSION' : 'CURRENT VERSION'}</span>
-                  <h3>{currentTrack.title}</h3>
+          {/* Audio Player Container */}
+          <AnimatePresence>
+            {currentTrack && (
+              <motion.div 
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="player-card glass"
+              >
+                <div className="player-header">
+                  <div>
+                    <span className="badge">{compareMode ? 'PREVIOUS VERSION' : 'CURRENT VERSION'}</span>
+                    <h3>{currentTrack.title}</h3>
+                  </div>
+                  {history.length > 0 && (
+                    <button className={`compare-toggle ${compareMode ? 'active' : ''}`} onClick={toggleCompare}>
+                      {compareMode ? 'BACK TO NEW' : 'COMPARE v1 vs v2'}
+                    </button>
+                  )}
                 </div>
-                {history.length > 0 && (
-                  <button className={`compare-toggle ${compareMode ? 'active' : ''}`} onClick={toggleCompare}>
-                    {compareMode ? 'BACK TO NEW' : 'COMPARE v1 vs v2'}
-                  </button>
-                )}
-              </div>
-              
-              <audio 
-                ref={audioRef}
-                controls 
-                src={compareMode ? history[0].url : currentTrack.url} 
-                autoPlay
-                className="wubble-player"
-              />
-            </div>
-          )}
+
+                <div className="visualizer-container">
+                  {[...Array(15)].map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`viz-bar ${isPlaying ? 'animating' : ''}`}
+                      style={{ animationDelay: `${i * 0.1}s`, height: `${20 + Math.random() * 60}%` }}
+                    ></div>
+                  ))}
+                </div>
+                
+                <audio 
+                  ref={audioRef}
+                  controls 
+                  src={compareMode ? history[0].url : currentTrack.url} 
+                  autoPlay
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => setIsPlaying(false)}
+                  className="wubble-player"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </main>
 
         <aside className="wubble-sidebar glass">
@@ -227,15 +265,23 @@ function App() {
             <h3>History</h3>
           </div>
           <div className="history-list">
-            {history.map((h, i) => (
-              <div key={i} className="history-item" onClick={() => setCurrentTrack(h)}>
-                <Play size={14} />
-                <div>
-                  <p className="h-title">{h.title}</p>
-                  <p className="h-prompt">{h.prompt.substring(0, 30)}...</p>
-                </div>
-              </div>
-            ))}
+            <AnimatePresence>
+              {history.map((h, i) => (
+                <motion.div 
+                  key={h.id + i}
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  className="history-item" 
+                  onClick={() => setCurrentTrack(h)}
+                >
+                  <Play size={14} />
+                  <div>
+                    <p className="h-title">{h.title}</p>
+                    <p className="h-prompt">{h.prompt.substring(0, 40)}...</p>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
             {history.length === 0 && <p className="empty-msg">No history yet.</p>}
           </div>
         </aside>
