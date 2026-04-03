@@ -1,65 +1,80 @@
 import { useState, useRef, useEffect } from 'react';
 
 /**
- * CUSTOM HOOK: useAudio
- * Manages the play/pause, preloading, and track switching logic 
- * for a specialized A/B Comparison demo.
+ * HOOK: useAudio (Stage 7 - High-Precision)
+ * Zero-compromise lifecycle and preloading for instant A/B Comparison.
  */
 export const useAudio = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
-  const audioRef = useRef(new Audio());
-  const prevAudioRef = useRef(new Audio());
+  
+  // High-performance refs for audio nodes
+  const currentAudio = useRef(new Audio());
+  const previousAudio = useRef(new Audio());
 
-  // Cleanup on unmount
+  // Cleanup effect
   useEffect(() => {
     return () => {
-      audioRef.current.pause();
-      prevAudioRef.current.pause();
+      currentAudio.current.pause();
+      previousAudio.current.pause();
     };
   }, []);
 
   /**
-   * Sets up or switches the current track.
+   * Eagerly preloads audio into memory for instant playback.
    */
-  const setTrack = (url, previousUrl = null) => {
-    // Current
-    audioRef.current.pause();
-    audioRef.current.src = url;
-    audioRef.current.load();
+  const setTrack = (url, lastUrl = null) => {
+    // 1. Full stop of any active audio
+    stopAll();
 
-    // Preload Previous (for instant A/B switch)
-    if (previousUrl) {
-      prevAudioRef.current.pause();
-      prevAudioRef.current.src = previousUrl;
-      prevAudioRef.current.load();
+    // 2. Load NEW audio
+    currentAudio.current.src = url;
+    currentAudio.current.load(); // Eager preload
+
+    // 3. Load PREVIOUS audio (for instant contrast mode)
+    if (lastUrl) {
+      previousAudio.current.src = lastUrl;
+      previousAudio.current.load(); // Eager preload
     }
   };
 
   const play = () => {
-    const active = compareMode ? prevAudioRef.current : audioRef.current;
+    const active = compareMode ? previousAudio.current : currentAudio.current;
     active.play();
     setIsPlaying(true);
   };
 
   const pause = () => {
-    audioRef.current.pause();
-    prevAudioRef.current.pause();
+    currentAudio.current.pause();
+    previousAudio.current.pause();
     setIsPlaying(false);
   };
 
+  const stopAll = () => {
+    currentAudio.current.pause();
+    currentAudio.current.currentTime = 0;
+    previousAudio.current.pause();
+    previousAudio.current.currentTime = 0;
+    setIsPlaying(false);
+  };
+
+  /**
+   * Sub-millisecond instant switch between current and previous versions.
+   */
   const toggleCompare = () => {
     if (compareMode) {
-      // Switching BACK to New
-      prevAudioRef.current.pause();
-      audioRef.current.currentTime = prevAudioRef.current.currentTime;
-      if (isPlaying) audioRef.current.play();
+      // Switching BACK to NEW
+      const time = previousAudio.current.currentTime;
+      previousAudio.current.pause();
+      currentAudio.current.currentTime = time;
+      if (isPlaying) currentAudio.current.play();
       setCompareMode(false);
     } else {
-      // Switching TO Previous
-      audioRef.current.pause();
-      prevAudioRef.current.currentTime = audioRef.current.currentTime;
-      if (isPlaying) prevAudioRef.current.play();
+      // Switching TO PREVIOUS
+      const time = currentAudio.current.currentTime;
+      currentAudio.current.pause();
+      previousAudio.current.currentTime = time;
+      if (isPlaying) previousAudio.current.play();
       setCompareMode(true);
     }
   };
@@ -70,9 +85,9 @@ export const useAudio = () => {
     setTrack,
     play,
     pause,
+    stopAll,
     toggleCompare,
     setIsPlaying,
-    audioRef,
-    prevAudioRef
+    currentAudio
   };
 };

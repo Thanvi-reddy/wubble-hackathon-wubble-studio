@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import VisualizerBars from './common/VisualizerBars';
+import CompareToggle from './common/CompareToggle';
 
 /**
- * COMPONENT: AudioPlayerSection
- * Handles the main playback window and comparison layout.
+ * COMPONENT: AudioPlayerSection (Dumb)
+ * Orchestrates playback and comparison UI.
  */
 const AudioPlayerSection = ({ 
   track, 
@@ -33,29 +35,14 @@ const AudioPlayerSection = ({
             <h3>{track.song_title || track.title}</h3>
           </div>
           
-          {hasHistory && (
-            <button 
-              className={`compare-toggle ${compareMode ? 'active' : ''}`} 
-              onClick={onToggleCompare}
-            >
-              {compareMode ? 'BACK TO NEW' : 'COMPARE v1 vs v2'}
-            </button>
-          )}
+          <CompareToggle 
+            active={compareMode} 
+            onToggle={onToggleCompare} 
+            disabled={!hasHistory} 
+          />
         </div>
 
-        {/* Visualizer Spectrogram (Fake) */}
-        <div className="visualizer-container">
-          {[...Array(15)].map((_, i) => (
-            <div 
-              key={i} 
-              className={`viz-bar ${isPlaying ? 'animating' : ''}`}
-              style={{ 
-                animationDelay: `${i * 0.1}s`, 
-                height: `${20 + Math.random() * 60}%` 
-              }}
-            ></div>
-          ))}
-        </div>
+        <VisualizerBars isPlaying={isPlaying} />
         
         <audio 
           ref={audioRef}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Zap, Volume2, Film } from 'lucide-react';
+import SuggestionPanel from './common/SuggestionPanel';
 
 const REMIX_CONFIG = {
   energy: { label: 'Energy', icon: <Zap size={18} /> },
@@ -8,8 +9,8 @@ const REMIX_CONFIG = {
 };
 
 /**
- * COMPONENT: RemixConsole
- * Handles prompt remixing and AI Guided Suggestions.
+ * COMPONENT: RemixConsole (Dumb)
+ * Orchestrates remix buttons and AI guidance.
  */
 const RemixConsole = ({ onRemix, suggestion, disabled }) => {
   return (
@@ -29,14 +30,7 @@ const RemixConsole = ({ onRemix, suggestion, disabled }) => {
         ))}
       </div>
 
-      {suggestion && (
-        <div className="suggestion-box">
-          <p className="suggestion-text">
-            <strong>{"Suggestion: "}</strong>
-            {suggestion.text}
-          </p>
-        </div>
-      )}
+      <SuggestionPanel message={suggestion?.text} />
     </div>
   );
 };
