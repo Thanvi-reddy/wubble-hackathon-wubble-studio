@@ -2,37 +2,40 @@
 
 Wubble Studio is a forward-thinking AI music generation platform that focuses on **guided exploration** and **intelligent evolution**. Instead of just generating static outputs, it acts as a co-creator, suggesting moods, adding depth, and allowing for instant version comparison.
 
-## 🚀 Key Differentiators (Top-Tier Hackathon Strategy)
+---
 
-- **🧠 Guided Intelligence:** The system explains *why* it suggests a remix ("Adding bass will give it more depth").
-- **⚡ Compare Mode:** An instant A/B toggle to showcase the difference between AI iterations.
-- **🛣️ Evolution Path:** A visual breadcrumb UI that shows the prompt journey (`v1 → v2 → v3`).
-- **🔗 Contextual Feedback:** Predictive "Suggested Next" actions based on current prompt content.
+## 🏆 Engineering Excellence (Hire This Person Build)
 
-## 📺 Demo Presentation Script (How to Win)
+This project has been architected for **scalability, maintainability, and product-level performance.** Unlike a typical hackathon "wrapper," this is a full-stack system.
 
-Use this script to guide your presentation:
+### 🧩 Specialized Architecture
+- **📡 Services Layer (`/src/services/wubbleApi.js`):** High-reliability API interaction with robust polling, timeout management, and custom error handling.
+- **🧠 Logic Engine (`/src/utils/promptEngine.js`):** An organic "thinking" layer that selects random variations for remixing to ensure diverse, intelligent outputs.
+- **🔊 Audio Controller Hook (`/src/hooks/useAudio.js`):** A custom React hook that manages play/pause, preloading, and track switching to enable **instant A/B comparison.**
+- **⚛️ Centralized State:** A unified `session` state design for deterministic UI behavior.
 
-1. **The Hook:** *"Most AI music tools are static. I built Wubble Studio to bridge the gap between complex AI and intuitive music creation via presets and guided evolution."*
-2. **The Preset:** Click **"🎧 Study,"** then hit **Generate.** Let the track play for 3 seconds.
-3. **The Intelligence:** Show the "AI Suggested Next" button. Say: *"The system intelligently suggested adding energy for focus. Let's try that."* Click the energy remix button.
-4. **The Aha! Moment:** Once the new version is ready, click **"COMPARE v1 vs v2."** Switch between them. Say: *"Notice the instant growth from the original lofi to a more focused beat. This is evolving music, not just generating it."*
-5. **The Close:** Show the history and evolution path. *"Every track is a journey. Thank you."*
+### 🎯 Key Product Differentiators
+- **Guided Intelligence:** Explains *why* suggestions are made (e.g., "Adding bass will give it more depth").
+- **Compare Mode:** Seamlessly switch between v1 and v2 instantly (zero buffering).
+- **Evolution Path:** Visual breadcrumb UI tracking your creative journey.
 
-## 🛠️ Tech Stack
+---
 
-- **Frontend:** React + Vite
-- **Styling:** Premium Vanilla CSS (Dark #0f0f0f + Glassmorphism)
-- **Animations:** Framer Motion
-- **Icons:** Lucide-React
-- **API:** Wubble AI (Chat/Multimodal Music Generation)
+## 📺 Winning Demo Script
 
-## 🛠️ Setup & Running
+1. **The Hook:** *"I built Wubble Studio to bridge the gap between complex AI and intuitive music creation via guided evolution."*
+2. **The Preset:** Click **"🎧 Study,"** then **Generate.** 
+3. **The Intelligence:** Show the "AI Suggested Next" button. Say: *"The system intelligently recommends energy for focus."* Hit the energy button.
+4. **The Aha! Moment:** Click **"COMPARE v1 vs v2."** Switch between them instantly. Say: *"Notice the growth from lofi to a focused beat. This is evolving sound."*
+5. **The Close:** *"Thank you."*
 
-1. **Clone the project**
-2. **Install dependencies:** `npm install`
-3. **Add your API Key:** Update `src/config.js` with your `WUBBLE_API_KEY`.
-4. **Run Dev Mode:** `npm run dev`
+---
+
+## 🛠️ Setup
+
+1. `npm install`
+2. Update `src/config.js` with your `WUBBLE_API_KEY`.
+3. `npm run dev`
 
 ---
 
