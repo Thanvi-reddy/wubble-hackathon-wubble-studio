@@ -2,34 +2,30 @@ import { useState } from 'react';
 import { generateTrack, waitForCompletion } from '../services/wubbleApi';
 
 /**
- * CUSTOM HOOK: useWubble (Stage 12 - Final Stabilization)
- * Orchestrates the full music generation lifecycle with instant error feedback.
+ * CUSTOM HOOK: useWubble (Stage 15 - Full Flow Sync)
+ * Orchestrates the music generation lifecycle with exact user-requested messaging.
  */
 export const useWubble = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [error, setError] = useState(null);
 
-  /**
-   * Triggers the generation flow.
-   * Returns: { success: true, data: track } OR { success: false, error: msg }
-   */
-  const generate = async (prompt) => {
+  const generate = async (prompt, isRemix = false) => {
     if (!prompt.trim()) return null;
 
     setIsGenerating(true);
-    setStatusMessage('Wubble is thinking...');
+    // PHASE 15: Exact Word Flow Alignment
+    setStatusMessage(isRemix ? '🎧 Reworking your track...' : '🎧 Generating your track...');
     setError(null);
 
     try {
-      // 700ms Psychology Thinking Delay
-      await new Promise(r => setTimeout(r, 700));
+      await new Promise(r => setTimeout(r, 800)); // Psychology Delay
 
       const { request_id } = await generateTrack(prompt);
       
       const result = await waitForCompletion(request_id, (status) => {
         if (status === 'processing') {
-          setStatusMessage('Reworking soundscape...');
+          setStatusMessage(isRemix ? '🎧 Refining sound layers...' : '🎧 Mapping soundscape...');
         }
       });
 
@@ -38,7 +34,7 @@ export const useWubble = () => {
       return { success: true, data: { ...result, id: request_id } };
       
     } catch (err) {
-      const msg = err.message || "Failed to generate track.";
+      const msg = err.message || "Something went wrong. Please try again.";
       setIsGenerating(false);
       setStatusMessage('');
       setError(msg);
@@ -46,10 +42,5 @@ export const useWubble = () => {
     }
   };
 
-  return {
-    isGenerating,
-    statusMessage,
-    error,
-    generate
-  };
+  return { isGenerating, statusMessage, error, generate };
 };

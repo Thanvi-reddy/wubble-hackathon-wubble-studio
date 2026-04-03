@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ArrowRight, Music, PlusCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, Music } from 'lucide-react';
 
-// STAGE 14: Winner-Level System Architecture
+// STAGE 15: Full-Flow System Harmony
 import { applyRemix } from './utils/remixEngine';
 import { getContextualSuggestion } from './utils/suggestionEngine';
 import { 
@@ -24,8 +24,8 @@ import HistorySidebar from './components/HistorySidebar';
 import './App.css';
 
 /**
- * WINNER-LEVEL ORCHESTRATOR: Wubble Studio (Stage 14)
- * High-impact UX with zero-empty-state methodology.
+ * FULL FLOW ORCHESTRATOR: Wubble Studio (Stage 15)
+ * Industrial user-flow following the 10-step master blueprint.
  */
 function App() {
   const [session, setSession] = useState({
@@ -47,12 +47,17 @@ function App() {
     }
   }, [session.currentTrack, isGenerating]);
 
-  const handleGenerate = async (overriddenPrompt = null) => {
+  /**
+   * ACTION: Unified Logic Flow (Step 3 & 5 Sync)
+   */
+  const handleGenerate = async (overriddenPrompt = null, isRemix = false) => {
     const activePrompt = resolvePrompt(session.prompt, overriddenPrompt);
     if (!canGenerate(activePrompt, isGenerating)) return;
 
+    // UX Safeguard: Silent Session Cleanup
     stopAll();
-    const response = await generate(activePrompt);
+
+    const response = await generate(activePrompt, isRemix);
     
     if (response?.success) {
       const newTrack = { ...response.data, prompt: activePrompt };
@@ -63,10 +68,14 @@ function App() {
     }
   };
 
+  /**
+   * ACTION: Sound Evolution (Step 5 Sync)
+   */
   const handleRemix = (type) => {
     const newPrompt = applyRemix(session.currentTrack.prompt, type);
     setSession(prev => updatePrompt(prev, newPrompt));
-    handleGenerate(newPrompt);
+    // Step 5 Branding: Pass isRemix=true for unique status messages
+    handleGenerate(newPrompt, true); 
   };
 
   return (
@@ -76,7 +85,6 @@ function App() {
           <Sparkles className="logo-icon" />
           <h1>Wubble Studio</h1>
         </motion.div>
-        {/* FIX #5: Product-Focused Tagline */}
         <p className="hook-subtitle">Generate, evolve, and compare AI music in real-time</p>
       </header>
 
@@ -87,39 +95,25 @@ function App() {
             <PromptInput 
               value={session.prompt}
               onChange={(val) => setSession(prev => updatePrompt(prev, val))}
-              onSelectPreset={handleGenerate}
+              onSelectPreset={(p) => handleGenerate(p, false)}
               disabled={isGenerating}
             />
             <p className="ux-hint">Start by selecting a preset or typing a creative prompt above</p>
           </div>
 
           <div className="wubble-card glass main-glow">
-            {/* Logic: If no track and not generating, show PROMINENT Placeholder (Fix #3) */}
             <AnimatePresence mode="wait">
               {!session.currentTrack && !isGenerating ? (
-                <motion.div 
-                  key="placeholder"
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }} 
-                  exit={{ opacity: 0 }}
-                  className="placeholder-state"
-                >
-                  <div className="placeholder-icon-wrap">
-                    <Music className="placeholder-icon" size={48} />
-                  </div>
+                <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="placeholder-state">
+                  <div className="placeholder-icon-wrap"><Music className="placeholder-icon" size={48} /></div>
                   <h2>Ready to Create?</h2>
                   <p>Your unique AI soundscape will appear here once you hit Generate.</p>
                 </motion.div>
               ) : null}
 
-              {/* Evolution Explorer Engine */}
+              {/* Step 6: Visual Evolution Map */}
               {session.evolution.length > 0 && !isGenerating && (
-                <motion.div 
-                  key="evolution"
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }} 
-                  className="evolution-line"
-                >
+                <motion.div key="evolution" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="evolution-line">
                   {session.evolution.map((step, i) => (
                     <span key={i} className="path-step">
                       {step} {i < session.evolution.length - 1 && <ArrowRight size={14} />}
@@ -141,7 +135,7 @@ function App() {
               <AnimatePresence>
                 {isGenerating && (
                   <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="status-msg">
-                    {statusMessage}
+                    {statusMessage || '🎧 Syncing sound layers...'}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -151,7 +145,7 @@ function App() {
               <p className="error-text">{"⚠️ Error: " + session.error}</p>
             )}
 
-            {/* Strategic Branding Logic Engines */}
+            {/* Step 4: Intelligent Context Engine */}
             {session.currentTrack && !isGenerating && (
               <RemixConsole 
                 onRemix={handleRemix}
@@ -184,7 +178,7 @@ function App() {
       </div>
 
       <footer className="wubble-footer">
-        <p>Industrial Purity & Winner-Level UX by Thanvi Reddy</p>
+        <p>Architected for the Wubble Hackathon | Full-Flow Mastery by Thanvi Reddy</p>
       </footer>
     </div>
   );
