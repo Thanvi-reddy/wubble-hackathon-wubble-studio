@@ -4,8 +4,8 @@ import VisualizerBars from './common/VisualizerBars';
 import CompareToggle from './common/CompareToggle';
 
 /**
- * COMPONENT: AudioPlayerSection (Dumb)
- * Orchestrates playback and comparison UI.
+ * COMPONENT: AudioPlayerSection (Pure UI - Stage 9)
+ * Orchestrates playback and A/B Comparison Engine UI.
  */
 const AudioPlayerSection = ({ 
   track, 
@@ -29,9 +29,7 @@ const AudioPlayerSection = ({
       >
         <div className="player-header">
           <div>
-            <span className="badge">
-              {compareMode ? 'PREVIOUS VERSION' : 'CURRENT VERSION'}
-            </span>
+            <span className="badge">{"A/B ENGINE — " + (compareMode ? 'PREVIOUS' : 'CURRENT')}</span>
             <h3>{track.song_title || track.title}</h3>
           </div>
           

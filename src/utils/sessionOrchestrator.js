@@ -1,11 +1,18 @@
 /**
- * SESSION ORCHESTRATOR
+ * SESSION ORCHESTRATOR (Stage 9 - Top 3)
  * Pure logic for updating session state, history, and evolution trails.
- * Decouples "Data Flow" from "UI Rendering."
+ * Handles final lifecycle logic away from UI components.
  */
 
 /**
- * Creates a new session state based on a fresh track generation.
+ * Validates if the system is ready to generate.
+ */
+export const canGenerate = (prompt, isGenerating) => {
+  return prompt.trim().length > 0 && !isGenerating;
+};
+
+/**
+ * Orchestrates a fresh track generation into the session state.
  */
 export const orchestrateNewTrack = (prevSession, newTrack) => {
   return {
