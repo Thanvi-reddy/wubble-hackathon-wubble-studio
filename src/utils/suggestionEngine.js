@@ -1,6 +1,5 @@
 /**
- * SUGGESTION ENGINE
- * Decoupled logic for guided AI exploration.
+ * CONTEXT-AWARE SUGGESTION ENGINE (PHASE 2)
  */
 
 const REMIX_DATA = {
@@ -20,13 +19,13 @@ const REMIX_DATA = {
 
 /**
  * Returns a contextual suggestion based on the prompt content.
- * @param {string} prompt 
  */
 export const getContextualSuggestion = (prompt) => {
   const p = prompt.toLowerCase();
   
   if (p.includes('lofi') || p.includes('ambient') || p.includes('chill')) {
-    return REMIX_DATA.energy;
+    // Phase 2: Logic specifically for lofi/chill vibes
+    return Math.random() > 0.5 ? REMIX_DATA.bass : REMIX_DATA.energy;
   }
   
   if (p.includes('orchestral') || p.includes('cinematic') || p.includes('strings')) {
