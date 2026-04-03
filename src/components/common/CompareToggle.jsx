@@ -1,8 +1,8 @@
 import React from 'react';
 
 /**
- * COMPONENT: CompareToggle
- * High-visibility switch for A/B comparison demo.
+ * COMPONENT: CompareToggle (Top 3 Tier)
+ * Strategic UI for the A/B Compare Engine.
  */
 const CompareToggle = ({ active, onToggle, disabled }) => {
   if (disabled) return null;
@@ -12,7 +12,7 @@ const CompareToggle = ({ active, onToggle, disabled }) => {
       className={`compare-toggle ${active ? 'active' : ''}`} 
       onClick={onToggle}
     >
-      {active ? 'BACK TO CURRENT' : 'COMPARE v1 vs v2'}
+      {active ? 'BACK TO CURRENT' : 'A/B COMPARE ENGINE'}
     </button>
   );
 };
