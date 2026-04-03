@@ -1,5 +1,5 @@
 /**
- * SESSION ORCHESTRATOR (Stage 9 - Top 3)
+ * SESSION ORCHESTRATOR (Stage 10 - Elite)
  * Pure logic for updating session state, history, and evolution trails.
  * Handles final lifecycle logic away from UI components.
  */
@@ -9,6 +9,13 @@
  */
 export const canGenerate = (prompt, isGenerating) => {
   return prompt.trim().length > 0 && !isGenerating;
+};
+
+/**
+ * Returns the resolved prompt for a generation request.
+ */
+export const resolvePrompt = (currentPrompt, overriddenPrompt = null) => {
+  return overriddenPrompt || currentPrompt;
 };
 
 /**

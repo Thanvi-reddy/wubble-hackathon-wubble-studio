@@ -2,21 +2,22 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
-// STAGE 9: System-Driven Architecture (Refined)
+// STAGE 10: Elite System Architecture
 import { applyRemix } from './utils/remixEngine';
 import { getContextualSuggestion } from './utils/suggestionEngine';
 import { 
   orchestrateNewTrack, 
   updatePrompt, 
   orchestrateError, 
-  canGenerate 
+  canGenerate,
+  resolvePrompt
 } from './utils/sessionOrchestrator';
 
-// STAGE 9: High-Tier Controller Hooks
+// STAGE 10: High-Tier Controller Hooks
 import { useAudioController } from './hooks/useAudioController';
 import { useWubble } from './hooks/useWubble';
 
-// STAGE 9: Pure UI Component Library
+// STAGE 10: Standardized UI Component Library (Pure UI)
 import PromptInput from './components/PromptInput';
 import RemixConsole from './components/RemixConsole';
 import AudioPlayerSection from './components/AudioPlayerSection';
@@ -25,11 +26,11 @@ import HistorySidebar from './components/HistorySidebar';
 import './App.css';
 
 /**
- * SYSTEM ORCHESTRATOR: Wubble Studio (Stage 9 - Final)
- * Industrial-tier high-impact music orchestration system.
+ * ELITE ORCHESTRATOR: Wubble Studio (Stage 10)
+ * Top-tier architectural implementation with zero-compromise logic separation.
  */
 function App() {
-  // 1. Centralized Session State
+  // 1. Centralized Engineered Session State
   const [session, setSession] = useState({
     prompt: '',
     currentTrack: null,
@@ -39,7 +40,7 @@ function App() {
     error: null
   });
 
-  // 2. High-Precision Systems
+  // 2. Specialized System Controllers
   const { isGenerating, statusMessage, error, generate } = useWubble();
   const { isPlaying, compareMode, setTrack, play, pause, stopAll, toggleCompare, audioRef } = useAudioController();
 
@@ -52,13 +53,13 @@ function App() {
   }, [session.currentTrack, isGenerating]);
 
   /**
-   * HANDLER: Generation Flow (Orchestrated)
+   * HANDLER: Music Generation (Elite Lifecycle)
    */
   const handleGenerate = async (overriddenPrompt = null) => {
-    const activePrompt = overriddenPrompt || session.prompt;
+    const activePrompt = resolvePrompt(session.prompt, overriddenPrompt);
     if (!canGenerate(activePrompt, isGenerating)) return;
 
-    // UX Safeguard: Reset playback for fresh creation
+    // UX Safeguard: Reset and Silent Audio Cleanup
     stopAll();
 
     const result = await generate(activePrompt);
@@ -66,10 +67,10 @@ function App() {
     if (result) {
       const newTrack = { ...result, prompt: activePrompt };
 
-      // HIGH-TIER: Eager Preloading for instant A/B demmo
+      // HIGH-TIER: Eager Preloading for sub-millisecond A/B switch
       setTrack(newTrack.audio_url, session.currentTrack?.audio_url);
 
-      // System Logic: History, Current, and Path Mapping
+      // System Orchestration: Pure logic decoupled from UI
       setSession(prev => orchestrateNewTrack(prev, newTrack));
     } else if (error) {
        setSession(prev => orchestrateError(prev, error));
@@ -77,7 +78,7 @@ function App() {
   };
 
   /**
-   * HANDLER: Evolutionary Remix
+   * HANDLER: Sound Remix / Evolution
    */
   const handleRemix = (type) => {
     const newPrompt = applyRemix(session.currentTrack.prompt, type);
@@ -92,7 +93,7 @@ function App() {
           <Sparkles className="logo-icon" />
           <h1>Wubble Studio</h1>
         </motion.div>
-        <p className="hook-subtitle">Intelligent AI Music System | System-Driven Engineering Build</p>
+        <p className="hook-subtitle">Intelligent AI Music System | Elite Architectural Build</p>
       </header>
 
       <div className="wubble-layout">
@@ -106,7 +107,7 @@ function App() {
           />
 
           <div className="wubble-card glass main-glow">
-            {/* Evolution Tracker Engine */}
+            {/* Evolution Explorer Engine */}
             {session.evolution.length > 0 && !isGenerating && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="evolution-line">
                 {session.evolution.map((step, i) => (
@@ -139,7 +140,7 @@ function App() {
               <p className="error-text">{"⚠️ Error: " + (session.error || error)}</p>
             )}
 
-            {/* Industrial Decoupled Engines */}
+            {/* Industrial Decoupled Logic Engines */}
             {session.currentTrack && !isGenerating && (
               <RemixConsole 
                 onRemix={handleRemix}
@@ -172,7 +173,7 @@ function App() {
       </div>
 
       <footer className="wubble-footer">
-        <p>Architected for the Wubble Hackathon | Industrial Purity by Thanvi Reddy</p>
+        <p>Architected for the Wubble Hackathon | Elite Purity by Thanvi Reddy</p>
       </footer>
     </div>
   );

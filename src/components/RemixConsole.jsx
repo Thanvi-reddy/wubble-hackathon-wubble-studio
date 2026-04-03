@@ -9,13 +9,13 @@ const REMIX_CONFIG = {
 };
 
 /**
- * COMPONENT: RemixConsole (Pure UI - Stage 9)
- * Modular UI for sound remixing and AI Guided Suggestions.
+ * COMPONENT: RemixConsole (Pure UI - Stage 10)
+ * Modular UI for sound remixing and Context-Aware Suggestion Engine.
  */
 const RemixConsole = ({ onRemix, suggestion, disabled }) => {
   return (
     <div className="remix-section">
-      <h4>{"Intelligent Suggestion Engine:"}</h4>
+      <h4>{"Context-Aware Suggestion Engine:"}</h4>
       
       <div className="remix-grid">
         {Object.entries(REMIX_CONFIG).map(([type, opt]) => (
