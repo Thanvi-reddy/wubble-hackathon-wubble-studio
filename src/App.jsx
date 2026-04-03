@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Music, PlusCircle } from 'lucide-react';
 
-// STAGE 12: Elite System Architecture (Final Stabilization)
+// STAGE 14: Winner-Level System Architecture
 import { applyRemix } from './utils/remixEngine';
 import { getContextualSuggestion } from './utils/suggestionEngine';
 import { 
@@ -13,11 +13,9 @@ import {
   resolvePrompt
 } from './utils/sessionOrchestrator';
 
-// STAGE 12: High-Tier Controller Hooks
 import { useAudioController } from './hooks/useAudioController';
 import { useWubble } from './hooks/useWubble';
 
-// STAGE 12: Pure UI Component Library (Final Branding)
 import PromptInput from './components/PromptInput';
 import RemixConsole from './components/RemixConsole';
 import AudioPlayerSection from './components/AudioPlayerSection';
@@ -26,11 +24,10 @@ import HistorySidebar from './components/HistorySidebar';
 import './App.css';
 
 /**
- * ELITE ORCHESTRATOR: Wubble Studio (Stage 12 - FINAL)
- * Final architectural stabilization and industrial-tier orchestration.
+ * WINNER-LEVEL ORCHESTRATOR: Wubble Studio (Stage 14)
+ * High-impact UX with zero-empty-state methodology.
  */
 function App() {
-  // 1. Centralized Engineered Session State
   const [session, setSession] = useState({
     prompt: '',
     currentTrack: null,
@@ -40,11 +37,9 @@ function App() {
     error: null
   });
 
-  // 2. Specialized System Controllers (Stage 12 stabilized)
   const { isGenerating, statusMessage, generate } = useWubble();
   const { isPlaying, compareMode, setTrack, play, pause, stopAll, toggleCompare, audioRef } = useAudioController();
 
-  // 3. Flow Engine: Automatic Contextual Suggestion Execution
   useEffect(() => {
     if (session.currentTrack && !isGenerating) {
       const suggestion = getContextualSuggestion(session.currentTrack.prompt);
@@ -52,34 +47,22 @@ function App() {
     }
   }, [session.currentTrack, isGenerating]);
 
-  /**
-   * ACTION: Music Generation Flow (Engineered Lifecycle)
-   */
   const handleGenerate = async (overriddenPrompt = null) => {
     const activePrompt = resolvePrompt(session.prompt, overriddenPrompt);
     if (!canGenerate(activePrompt, isGenerating)) return;
 
-    // UX Safeguard: Silent Audio Reset
     stopAll();
-
     const response = await generate(activePrompt);
     
     if (response?.success) {
       const newTrack = { ...response.data, prompt: activePrompt };
-
-      // HIGH-TIER: Eager Preloading for instant switch demo
       setTrack(newTrack.audio_url, session.currentTrack?.audio_url);
-
-      // System Orchestration: Pure logic decoupled from UI
       setSession(prev => orchestrateNewTrack(prev, newTrack));
     } else if (response?.error) {
        setSession(prev => orchestrateError(prev, response.error));
     }
   };
 
-  /**
-   * ACTION: Evolution Remix Transformation
-   */
   const handleRemix = (type) => {
     const newPrompt = applyRemix(session.currentTrack.prompt, type);
     setSession(prev => updatePrompt(prev, newPrompt));
@@ -93,38 +76,66 @@ function App() {
           <Sparkles className="logo-icon" />
           <h1>Wubble Studio</h1>
         </motion.div>
-        <p className="hook-subtitle">Intelligent AI Music System | Stage 12 Final Mastery Build</p>
+        {/* FIX #5: Product-Focused Tagline */}
+        <p className="hook-subtitle">Generate, evolve, and compare AI music in real-time</p>
       </header>
 
       <div className="wubble-layout">
         <main className="wubble-main">
           
-          <PromptInput 
-            value={session.prompt}
-            onChange={(val) => setSession(prev => updatePrompt(prev, val))}
-            onSelectPreset={handleGenerate}
-            disabled={isGenerating}
-          />
+          <div className="input-orchestrator">
+            <PromptInput 
+              value={session.prompt}
+              onChange={(val) => setSession(prev => updatePrompt(prev, val))}
+              onSelectPreset={handleGenerate}
+              disabled={isGenerating}
+            />
+            <p className="ux-hint">Start by selecting a preset or typing a creative prompt above</p>
+          </div>
 
           <div className="wubble-card glass main-glow">
-            {/* Visual Evolution Trail Mapping */}
-            {session.evolution.length > 0 && !isGenerating && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="evolution-line">
-                {session.evolution.map((step, i) => (
-                  <span key={i} className="path-step">
-                    {step} {i < session.evolution.length - 1 && <ArrowRight size={14} />}
-                  </span>
-                ))}
-              </motion.div>
-            )}
+            {/* Logic: If no track and not generating, show PROMINENT Placeholder (Fix #3) */}
+            <AnimatePresence mode="wait">
+              {!session.currentTrack && !isGenerating ? (
+                <motion.div 
+                  key="placeholder"
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  exit={{ opacity: 0 }}
+                  className="placeholder-state"
+                >
+                  <div className="placeholder-icon-wrap">
+                    <Music className="placeholder-icon" size={48} />
+                  </div>
+                  <h2>Ready to Create?</h2>
+                  <p>Your unique AI soundscape will appear here once you hit Generate.</p>
+                </motion.div>
+              ) : null}
+
+              {/* Evolution Explorer Engine */}
+              {session.evolution.length > 0 && !isGenerating && (
+                <motion.div 
+                  key="evolution"
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  className="evolution-line"
+                >
+                  {session.evolution.map((step, i) => (
+                    <span key={i} className="path-step">
+                      {step} {i < session.evolution.length - 1 && <ArrowRight size={14} />}
+                    </span>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="action-row">
               <button 
-                className={`generate-btn ${isGenerating ? 'pulse' : ''}`}
+                className={`generate-btn ${isGenerating ? 'pulse' : ''} ${canGenerate(session.prompt, isGenerating) ? 'btn-ready' : ''}`}
                 onClick={() => handleGenerate()}
                 disabled={!canGenerate(session.prompt, isGenerating)}
               >
-                {isGenerating ? 'AI ENGINE — THINKING...' : 'GENERATE MUSIC'}
+                {isGenerating ? 'ENGINE — THINKING...' : 'GENERATE MUSIC'}
               </button>
               
               <AnimatePresence>
@@ -173,7 +184,7 @@ function App() {
       </div>
 
       <footer className="wubble-footer">
-        <p>Architected for the Wubble Hackathon | End-to-End Master Stabilization by Thanvi Reddy</p>
+        <p>Industrial Purity & Winner-Level UX by Thanvi Reddy</p>
       </footer>
     </div>
   );

@@ -1,47 +1,52 @@
 import React from 'react';
-import { History as HistoryIcon, Play } from 'lucide-react';
+import { History, Clock, Music } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
- * COMPONENT: HistorySidebar
- * Displays a persistent list of previous versions.
+ * COMPONENT: HistorySidebar (Stage 14 - Winner Level)
+ * Industrial history tracker with high-impact onboarding / empty states.
  */
 const HistorySidebar = ({ history, onSelect }) => {
   return (
-    <aside className="wubble-sidebar glass">
+    <div className="wubble-sidebar glass">
       <div className="sidebar-header">
-        <HistoryIcon size={18} />
-        <h3>History</h3>
+        <History size={20} className="sidebar-icon" />
+        <h4>SESSION HISTORY</h4>
       </div>
-      
+
       <div className="history-list">
         <AnimatePresence>
-          {history.length > 0 ? (
+          {history.length === 0 ? (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }}
+              className="empty-history"
+            >
+              <Music size={32} />
+              <p>No tracks yet — generate your first soundscape to start your session history.</p>
+            </motion.div>
+          ) : (
             history.map((h, i) => (
               <motion.div 
-                key={h.id || i}
-                initial={{ x: 20, opacity: 0 }}
+                key={i} 
+                initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                className="history-item" 
+                className="history-item"
                 onClick={() => onSelect(h)}
               >
-                <div className="history-icon-circle">
-                  <Play size={14} fill="currentColor" />
-                </div>
-                <div>
-                  <p className="h-title">{h.song_title || h.title}</p>
-                  <p className="h-prompt">
-                    {h.prompt.substring(0, 35)}...
-                  </p>
+                <div className="history-info">
+                  <strong>{h.song_title}</strong>
+                  <div className="history-meta">
+                    <Clock size={12} />
+                    <span>RECENT EVOLUTION</span>
+                  </div>
                 </div>
               </motion.div>
             ))
-          ) : (
-            <p className="empty-msg">Start creating to record your session history.</p>
           )}
         </AnimatePresence>
       </div>
-    </aside>
+    </div>
   );
 };
 
