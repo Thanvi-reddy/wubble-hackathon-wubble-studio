@@ -20,11 +20,11 @@ By turning music generation into a collaborative, exploratory experience, we bri
 
 ##  Strategic-Level Engines (System Advantage)
 
-- ** Generation Engine** — Create high-fidelity tracks from simple descriptive prompts.
-- ** Context-Aware Suggestion Engine** — Proactively guides users with **Contextual Mapping** (e.g., *"Adding bass will give it more depth"*).
-- ** Remix Engine** — Intelligently evolve sound via **Energy, Bass, and Cinematic** systemic transformations.
-- ** A/B Compare Engine** — A seamless, **Eagerly Preloaded Switch** to hear the precise difference between versions without buffering.
-- ** Evolution Explorer** — Visual breadcrumb trail mapping your creative journey.
+- **Generation Engine** — Create high-fidelity tracks from simple descriptive prompts.
+- **Context-Aware Suggestion Engine** — Proactively guides users with **Contextual Mapping** (e.g., *"Adding bass will give it more depth"*).
+- **Remix Engine** — Intelligently evolve sound via **Energy, Bass, and Cinematic** systemic transformations.
+- **A/B Compare Engine** — A seamless, **Eagerly Preloaded Switch** to hear the precise difference between versions without buffering.
+- **Evolution Explorer** — Visual breadcrumb trail mapping your creative journey.
 
 ---
 
@@ -32,10 +32,10 @@ By turning music generation into a collaborative, exploratory experience, we bri
 
 Built with **System-Driven Engineering** for maximum reliability and demo impact:
 
-- ** Service Layer (`/services`)**: Industrial-grade API orchestration.
-- ** Audio Controller Hook (`/hooks`)**: Life-cycle management for **eager track preloading.**
-- ** Intelligence Engines (`/utils`)**: Decoupled Suggestion and Remix logic.
-- ** Pure UI Components**: 100% logic-free presentational components.
+Service Layer (`/services`): Industrial-grade API orchestration.
+Audio Controller Hook (`/hooks`): Life-cycle management for eager track preloading.
+Intelligence Engines (`/utils`): Decoupled Suggestion and Remix logic.
+Pure UI Components: 100% logic-free presentational components.
 
 ---
 
